@@ -1,65 +1,51 @@
 package com.myapps.majorprojectversion5;
 
-import android.graphics.Color;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-import androidx.appcompat.widget.Toolbar;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Profile extends Fragment {
 
-    Toolbar toolbar;
-    EditText et;
-    MaterialButton btnEditProfile;
-    ImageView ivProfile;
+    TextView textView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        textView = view.findViewById(R.id.tvWallet);
 
-//        toolbar = view.findViewById(R.id.toolBarProfile);
-//        toolbar.setTitle("Profile");
-//        toolbar.setTitleTextColor(Color.WHITE);
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("MySharedPred", Context.MODE_PRIVATE);
+        String uid = sharedPreferences.getString("uid", "");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Wallet");
 
-        et = view.findViewById(R.id.etProfileName);
-        ivProfile = view.findViewById(R.id.ivProfile);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Long str = snapshot.child("coins").getValue(Long.class);
+                    textView.setText(String.valueOf(str));
+                }
+            }
 
-        et.setCursorVisible(false);
-        et.setLongClickable(false);
-        et.setClickable(false);
-        et.setFocusable(false);
-        et.setSelected(false);
-        et.setKeyListener(null);
-        et.setBackgroundResource(android.R.color.transparent);
-//        btnEditProfile = view.findViewById(R.id.btnEditProfile);
-//        btnEditProfile.setOnClickListener(view1 -> {
-//            et.setCursorVisible(true);
-//            et.setLongClickable(true);
-//            et.setClickable(true);
-//            et.setFocusable(true);
-//            et.setSelected(true);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-//            ivProfile.setClickable(true);
-
-//            ivProfile.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//
-//                }
-//            });
-//            btnEditProfile.setText(R.string.Save);
-
-
-//        });
+            }
+        });
 
 
         return view;

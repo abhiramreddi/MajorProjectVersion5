@@ -26,4 +26,12 @@
     <string name="Save">Save</string>
     <string name="or">or</string>
     <string name="login_here">Login Here</string>
+    <string name="survey_here">Survey here</string>
+    <string name="quest">Question</string>
+    <string name="option1">Option1</string>
+    <string name="option2">Option2</string>
+    <string name="enter_your_answer">Enter Your Answer :</string>
+    <string name="submit">Submit</string>
+    <string name="wallett">Wallet :</string>
+    <string name="amount">Amount</string>
 </resources>
